@@ -1,0 +1,26 @@
+name: 'driver-submission'
+author: 'Sentry Corporation'
+description: 'A GitHub Action to automate driver submission'
+inputs:
+  tenant-id:
+    description: 'Specifies tenant id of the submitter AAD'
+    required: true
+  client-id:
+    description: 'Specifies client id of the submitter AAD'
+    required: true
+  client-secret:
+    description: 'Specifies client secret of the submitter AAD'
+    required: true
+  product-name:
+    description: 'Specifies product name of the driver'
+    required: true
+  bin-path-in:
+    description: 'Specifies input file path to submit'
+    required: true
+  bin-path-out:
+    description: 'Specifies output file path to submit'
+    required: false
+    default: ''
+runs:
+  using: 'node16'
+  main: 'src/main.js'

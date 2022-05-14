@@ -1,0 +1,24 @@
+{
+  "name": "driver-submission",
+  "version": "1.0.0",
+  "description": "A GitHub Action to automate driver submission",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sentry-corporation/driver-submission.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sentry-corporation/driver-submission/issues"
+  },
+  "homepage": "https://github.com/sentry-corporation/driver-submission#readme",
+  "dependencies": {
+    "@actions/core": "^1.8.2",
+    "@actions/github": "^5.0.3"
+  }
+}
