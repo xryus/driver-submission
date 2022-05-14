@@ -71,8 +71,8 @@ const Session = class {
             deviceMetadataIds: [],
             firmwareVersion: '980',
             deviceType: 'internalExternal',
-            isTestSign: False,
-            isFlightSign: False,
+            isTestSign: false,
+            isFlightSign: false,
             marketingNames: [],
             selectedProductTypes: {},
             requestedSignatures: [
