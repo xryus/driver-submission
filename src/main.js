@@ -67,7 +67,6 @@ const Session = class {
         payload = {
             productName: productName,
             testHarness: 'attestation',
-            announcementDate: datetime.datetime.now().isoformat('T', 'seconds'),
             deviceMetadataIds: [],
             firmwareVersion: '980',
             deviceType: 'internalExternal',
