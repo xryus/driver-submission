@@ -56,7 +56,7 @@ const Session = class {
         core.debug('authentication succeeded');
       })
       .catch((err) => {
-        core.setFailed(`${ERRORS.INVALID_CREDENTIALS}}: ${err}`);
+        core.setFailed(`${ERRORS.INVALID_CREDENTIALS}: ${err}`);
       });
   }
 
@@ -88,7 +88,7 @@ const Session = class {
         this.product = res.data;
       })
       .catch((err) => {
-        core.setFailed(`${ERRORS.SUBMISSION_PRODUCT_CREATE_FAILED}}: ${err}`);
+        core.setFailed(`${ERRORS.SUBMISSION_PRODUCT_CREATE_FAILED}: ${err}`);
       });
   }
 
@@ -111,7 +111,7 @@ const Session = class {
         this.submission = res.data;
       })
       .catch((err) => {
-        core.setFailed(`${ERRORS.SUBMISSION_CREATE_FAILED}}: ${err}`);
+        core.setFailed(`${ERRORS.SUBMISSION_CREATE_FAILED}: ${err}`);
       });
 
     return true;
@@ -159,7 +159,7 @@ const Session = class {
         this.status = res.data;
       })
       .catch((err) => {
-        core.setFailed(`${ERRORS.SUBMISSION_QUERY_FAILED}}: ${err}`);
+        core.setFailed(`${ERRORS.SUBMISSION_QUERY_FAILED}: ${err}`);
       });
 
     return true;
