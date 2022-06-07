@@ -15,7 +15,7 @@ const BIN_PATH_IN = core.getInput('bin-path-in');
 const BIN_PATH_OUT = core.getInput('bin-path-out');
 const USE_OUTPUT = !!BIN_PATH_OUT;
 
-core.info(`${SIGNATURES}`);
+core.info(`${typeof SIGNATURES}`);
 
 const ERRORS = {
   INVALID_CREDENTIALS: 'An invalid credentials specified',
