@@ -258,7 +258,7 @@ async function main() {
         previousStep = step;
       }
     } else {
-      core.info('current step:', step);
+      core.info(`current step: ${step}`);
       previousStep = step;
     }
     if (state == 'completed') {
