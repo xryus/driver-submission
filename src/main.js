@@ -123,10 +123,7 @@ const Session = class {
 
     await axios
       .create({
-        baseURL:
-          `https://manage.devcenter.microsoft.com/v2.0/my/hardware/products/` +
-          productId +
-          `/submissions`,
+        baseURL: `https://manage.devcenter.microsoft.com/v2.0/my/hardware/products/${productId}/submissions`,
         headers: {
           Authorization: this.auth,
         },
@@ -154,17 +151,14 @@ const Session = class {
       data: binary,
     });
 
-    if (res.status != 201) throw 'error';
+    if (res.status != 201) {
+      throw 'error';
+    }
     return true;
   }
 
   async commitSubmission(productId, submissionId) {
-    var url =
-      `https://manage.devcenter.microsoft.com/v2.0/my/hardware/products/` +
-      productId +
-      `/submissions/` +
-      submissionId +
-      `/commit`;
+    var url = `https://manage.devcenter.microsoft.com/v2.0/my/hardware/products/${productId}/submissions/${submissionId}/commit`;
     var res = await axios({
       method: 'POST',
       url: url,
@@ -180,11 +174,7 @@ const Session = class {
   }
 
   async querySubmission(productId, submissionId) {
-    var url =
-      `https://manage.devcenter.microsoft.com/v2.0/my/hardware/products/` +
-      productId +
-      `/submissions/` +
-      submissionId;
+    var url = `https://manage.devcenter.microsoft.com/v2.0/my/hardware/products/${productId}/submissions/${submissionId}`;
     await axios
       .get(url, { headers: { Authorization: this.auth } })
       .then((res) => {
