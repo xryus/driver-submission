@@ -3,7 +3,7 @@ A GitHub Action to automate driver submission
 
 # Credits
 
-- Special thanks [@doranekosystems](https://github.com/DoranekoSystems) helped transforming internal Python code into this javsscript.
+- Special thanks [@doranekosystems](https://github.com/DoranekoSystems) helped transforming internal Python code into this javascript.
 
 # License
 
