@@ -1,5 +1,5 @@
-const axios = require("axios");
-const fs = require("fs");
+const axios = require('axios');
+const fs = require('fs');
 
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
@@ -12,13 +12,13 @@ const BIN_PATH_OUT = process.argv[7];
 const USE_OUTPUT = !!BIN_PATH_OUT;
 
 const ERRORS = {
-  INVALID_CREDENTIALS: "An invalid credentials specified",
-  SUBMISSION_FAILED: "A submission failed",
-  SUBMISSION_COMMIT_FAILED: "A submission commit failed",
-  SUBMISSION_QUERY_FAILED: "A submission query failed",
-  SUBMISSION_UPLOAD_FAILED: "A submission file upload failed",
-  SUBMISSION_CREATE_FAILED: "A submission creation failed",
-  SUBMISSION_PRODUCT_CREATE_FAILED: "A submission product creation failed",
+  INVALID_CREDENTIALS: 'An invalid credentials specified',
+  SUBMISSION_FAILED: 'A submission failed',
+  SUBMISSION_COMMIT_FAILED: 'A submission commit failed',
+  SUBMISSION_QUERY_FAILED: 'A submission query failed',
+  SUBMISSION_UPLOAD_FAILED: 'A submission file upload failed',
+  SUBMISSION_CREATE_FAILED: 'A submission creation failed',
+  SUBMISSION_PRODUCT_CREATE_FAILED: 'A submission product creation failed',
 };
 
 const Session = class {
@@ -30,20 +30,20 @@ const Session = class {
 
   async init() {
     var payload = new URLSearchParams();
-    payload.append("grant_type", "client_credentials");
-    payload.append("client_id", this.clientId);
-    payload.append("client_secret", this.clientSecret);
-    payload.append("resource", "https://manage.devcenter.microsoft.com");
+    payload.append('grant_type', 'client_credentials');
+    payload.append('client_id', this.clientId);
+    payload.append('client_secret', this.clientSecret);
+    payload.append('resource', 'https://manage.devcenter.microsoft.com');
 
     await axios
       .create({
         baseURL: `https://login.microsoftonline.com/${this.tenantId}/oauth2/token`,
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
-        responseType: "json",
+        responseType: 'json',
       })
-      .post("/", payload)
+      .post('/', payload)
       .then((res) => {
         this.tokenType = res.data.token_type;
         this.token = res.data.access_token;
@@ -61,38 +61,38 @@ const Session = class {
   async newProduct(productName) {
     var payload = {
       productName: productName,
-      testHarness: "attestation",
+      testHarness: 'attestation',
       deviceMetadataIds: [],
-      firmwareVersion: "980",
-      deviceType: "internalExternal",
+      firmwareVersion: '980',
+      deviceType: 'internalExternal',
       isTestSign: false,
       isFlightSign: false,
       marketingNames: [],
       selectedProductTypes: {},
       requestedSignatures: [
-        "WINDOWS_v100_TH2_FULL",
-        "WINDOWS_v100_X64_TH2_FULL",
-        "WINDOWS_v100_RS1_FULL",
-        "WINDOWS_v100_X64_RS1_FULL",
-        "WINDOWS_v100_RS2_FULL",
-        "WINDOWS_v100_X64_RS2_FULL",
-        "WINDOWS_v100_RS3_FULL",
-        "WINDOWS_v100_X64_RS3_FULL",
-        "WINDOWS_v100_ARM64_RS3_FULL",
-        "WINDOWS_v100_RS4_FULL",
-        "WINDOWS_v100_X64_RS4_FULL",
-        "WINDOWS_v100_ARM64_RS4_FULL",
-        "WINDOWS_v100_RS5_FULL",
-        "WINDOWS_v100_X64_RS5_FULL",
-        "WINDOWS_v100_ARM64_RS5_FULL",
-        "WINDOWS_v100_19H1_FULL",
-        "WINDOWS_v100_X64_19H1_FULL",
-        "WINDOWS_v100_ARM64_19H1_FULL",
-        "WINDOWS_v100_VB_FULL",
-        "WINDOWS_v100_X64_VB_FULL",
-        "WINDOWS_v100_ARM64_VB_FULL",
-        "WINDOWS_v100_X64_CO_FULL",
-        "WINDOWS_v100_ARM64_CO_FULL",
+        'WINDOWS_v100_TH2_FULL',
+        'WINDOWS_v100_X64_TH2_FULL',
+        'WINDOWS_v100_RS1_FULL',
+        'WINDOWS_v100_X64_RS1_FULL',
+        'WINDOWS_v100_RS2_FULL',
+        'WINDOWS_v100_X64_RS2_FULL',
+        'WINDOWS_v100_RS3_FULL',
+        'WINDOWS_v100_X64_RS3_FULL',
+        'WINDOWS_v100_ARM64_RS3_FULL',
+        'WINDOWS_v100_RS4_FULL',
+        'WINDOWS_v100_X64_RS4_FULL',
+        'WINDOWS_v100_ARM64_RS4_FULL',
+        'WINDOWS_v100_RS5_FULL',
+        'WINDOWS_v100_X64_RS5_FULL',
+        'WINDOWS_v100_ARM64_RS5_FULL',
+        'WINDOWS_v100_19H1_FULL',
+        'WINDOWS_v100_X64_19H1_FULL',
+        'WINDOWS_v100_ARM64_19H1_FULL',
+        'WINDOWS_v100_VB_FULL',
+        'WINDOWS_v100_X64_VB_FULL',
+        'WINDOWS_v100_ARM64_VB_FULL',
+        'WINDOWS_v100_X64_CO_FULL',
+        'WINDOWS_v100_ARM64_CO_FULL',
       ],
       additionalAttributes: {},
     };
@@ -103,9 +103,9 @@ const Session = class {
         headers: {
           Authorization: this.auth,
         },
-        responseType: "json",
+        responseType: 'json',
       })
-      .post("/", payload)
+      .post('/', payload)
       .then((res) => {
         this.product = res.data;
       })
@@ -115,7 +115,7 @@ const Session = class {
       });
   }
 
-  async newSubmission(productId, productName, productType = "initial") {
+  async newSubmission(productId, productName, productType = 'initial') {
     var payload = {
       name: productName,
       type: productType,
@@ -130,9 +130,9 @@ const Session = class {
         headers: {
           Authorization: this.auth,
         },
-        responseType: "json",
+        responseType: 'json',
       })
-      .post("/", payload)
+      .post('/', payload)
       .then((res) => {
         this.submission = res.data;
       })
@@ -145,16 +145,16 @@ const Session = class {
   }
 
   async uploadFile(url, path) {
-    const binary = await require("fs/promises").readFile(path);
+    const binary = await require('fs/promises').readFile(path);
 
     var res = await axios({
-      method: "PUT",
+      method: 'PUT',
       url: url,
-      headers: { "x-ms-blob-type": "BlockBlob" },
+      headers: { 'x-ms-blob-type': 'BlockBlob' },
       data: binary,
     });
 
-    if (res.status != 201) throw "error";
+    if (res.status != 201) throw 'error';
     return true;
   }
 
@@ -166,15 +166,15 @@ const Session = class {
       submissionId +
       `/commit`;
     var res = await axios({
-      method: "POST",
+      method: 'POST',
       url: url,
       headers: {
         Authorization: this.auth,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
 
-    if (res.status != 202) throw "error";
+    if (res.status != 202) throw 'error';
 
     return true;
   }
@@ -191,7 +191,7 @@ const Session = class {
         this.status = res.data;
       })
       .catch((err) => {
-        console.log("err:", err);
+        console.log('err:', err);
       });
 
     return true;
@@ -199,37 +199,37 @@ const Session = class {
 };
 
 async function downloadFileFromUrl(url, file) {
-  const res = await axios.get(url, { responseType: "arraybuffer" });
-  fs.writeFileSync(file, new Buffer.from(res.data), "binary");
+  const res = await axios.get(url, { responseType: 'arraybuffer' });
+  fs.writeFileSync(file, new Buffer.from(res.data), 'binary');
 }
 
 async function main() {
   var session = new Session(TENANT_ID, CLIENT_ID, CLIENT_SECRET);
   await session.init();
 
-  console.log("create new product...");
+  console.log('create new product...');
   await session.newProduct(PRODUCT_NAME);
-  var productIdStr = session.product["links"][0]["href"]
-    .split("/")
+  var productIdStr = session.product['links'][0]['href']
+    .split('/')
     .slice(-1)[0];
-  console.log("created product id: ", productIdStr);
+  console.log('created product id: ', productIdStr);
 
-  console.log("create new submission...");
+  console.log('create new submission...');
   await session.newSubmission(productIdStr, PRODUCT_NAME);
-  var submissionIdStr = session.submission["links"][0]["href"]
-    .split("/")
+  var submissionIdStr = session.submission['links'][0]['href']
+    .split('/')
     .slice(-1)[0];
-  console.log("created submission id: ", submissionIdStr);
+  console.log('created submission id: ', submissionIdStr);
 
-  var uploadUrl = session.submission["downloads"]["items"][0]["url"];
-  console.log("upload url: ", uploadUrl);
+  var uploadUrl = session.submission['downloads']['items'][0]['url'];
+  console.log('upload url: ', uploadUrl);
 
-  console.log("upload to blob...");
+  console.log('upload to blob...');
   var uploaded = await session.uploadFile(uploadUrl, BIN_PATH_IN);
   console.log(uploaded);
-  console.log("the file has been uploaded to blob");
+  console.log('the file has been uploaded to blob');
 
-  console.log("commit submission...");
+  console.log('commit submission...');
   var commit_retry_count = 0;
   while (true) {
     try {
@@ -248,39 +248,39 @@ async function main() {
       }
     }
   }
-  console.log("submission has been committed");
-  console.log("wait for the submission to complete");
+  console.log('submission has been committed');
+  console.log('wait for the submission to complete');
 
-  var previousStep = "";
+  var previousStep = '';
   while (true) {
     //Refresh session every time, othwerwise, the status will show same forever.
     session = new Session(TENANT_ID, CLIENT_ID, CLIENT_SECRET);
     await session.init();
 
     await session.querySubmission(productIdStr, submissionIdStr);
-    var step = session.status["workflowStatus"]["currentStep"];
-    var state = session.status["workflowStatus"]["state"];
+    var step = session.status['workflowStatus']['currentStep'];
+    var state = session.status['workflowStatus']['state'];
 
     if (previousStep) {
       if (previousStep != step) {
-        console.log("step has been changed to:", step);
+        console.log('step has been changed to:', step);
         previousStep = step;
       }
     } else {
-      console.log("current step:", step);
+      console.log('current step:', step);
       previousStep = step;
     }
-    if (state == "completed") {
-      console.log("the submission has been completed successfully");
+    if (state == 'completed') {
+      console.log('the submission has been completed successfully');
       var foundSignedPackage = false;
       while (!foundSignedPackage) {
-        var items = session.status["downloads"]["items"];
+        var items = session.status['downloads']['items'];
         for (var index = 0; index < items.length; index++) {
           var v = items[index];
-          if (v["type"] == "signedPackage") {
-            console.log("signed package download url:", v["url"]);
-            var zipFileName = "signed.zip";
-            await downloadFileFromUrl(v["url"], zipFileName);
+          if (v['type'] == 'signedPackage') {
+            console.log('signed package download url:', v['url']);
+            var zipFileName = 'signed.zip';
+            await downloadFileFromUrl(v['url'], zipFileName);
             //fs.createReadStream(zipFileName).pipe(
             //  unzip.Extract({ path: "./signed" })
             //);
@@ -290,20 +290,19 @@ async function main() {
             break;
           }
         }
-        if(foundSignedPackage)
-          break;
+        if (foundSignedPackage) break;
         session = new Session(TENANT_ID, CLIENT_ID, CLIENT_SECRET);
         await session.init();
         await session.querySubmission(productIdStr, submissionIdStr);
         await sleep(5000);
       }
       break;
-    } else if (state == "failed") {
-      throw "error";
+    } else if (state == 'failed') {
+      throw 'error';
     }
     await sleep(5000);
   }
-  console.log("done");
+  console.log('done');
 }
 
 main();
