@@ -66,7 +66,6 @@ const Session = class {
       productName: productName,
       testHarness: 'attestation',
       deviceMetadataIds: [],
-      firmwareVersion: '980',
       deviceType: 'internalExternal',
       isTestSign: false,
       isFlightSign: false,
