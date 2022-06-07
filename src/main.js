@@ -203,24 +203,23 @@ async function main() {
   var productIdStr = session.product['links'][0]['href']
     .split('/')
     .slice(-1)[0];
-  core.info('created product id: ', productIdStr);
+  core.info(`created product id: ${productIdStr}`);
 
   core.info('create new submission...');
   await session.newSubmission(productIdStr, PRODUCT_NAME);
   var submissionIdStr = session.submission['links'][0]['href']
     .split('/')
     .slice(-1)[0];
-  core.info('created submission id: ', submissionIdStr);
+  core.info(`created submission id: ${submissionIdStr}`);
 
   var uploadUrl = session.submission['downloads']['items'][0]['url'];
-  core.info('upload url: ', uploadUrl);
+  core.info(`upload url: ${uploadUrl}`);
 
-  core.info('upload to blob...');
+  core.info(`upload to blob...`);
   var uploaded = await session.uploadFile(uploadUrl, BIN_PATH_IN);
-  core.info(uploaded);
-  core.info('the file has been uploaded to blob');
+  core.info(`the file has been uploaded to blob (${uploaded})`);
 
-  core.info('commit submission...');
+  core.info(`commit submission...`);
   var commit_retry_count = 0;
   while (true) {
     try {
@@ -240,8 +239,8 @@ async function main() {
     }
   }
 
-  core.info('submission has been committed');
-  core.info('wait for the submission to complete');
+  core.info(`submission has been committed`);
+  core.info(`wait for the submission to complete`);
 
   var previousStep = '';
   while (true) {
@@ -255,7 +254,7 @@ async function main() {
 
     if (previousStep) {
       if (previousStep != step) {
-        core.info('step has been changed to:', step);
+        core.info(`step has been changed to: ${step}`);
         previousStep = step;
       }
     } else {
@@ -263,14 +262,14 @@ async function main() {
       previousStep = step;
     }
     if (state == 'completed') {
-      core.info('the submission has been completed successfully');
+      core.info(`the submission has been completed successfully`);
       var foundSignedPackage = false;
       while (!foundSignedPackage) {
         var items = session.status['downloads']['items'];
         for (var index = 0; index < items.length; index++) {
           var v = items[index];
           if (v['type'] == 'signedPackage') {
-            core.info('signed package download url:', v['url']);
+            core.info(`signed package download url: ${v['url']}`);
             var zipFileName = 'signed.zip';
             await downloadFileFromUrl(v['url'], zipFileName);
             //fs.createReadStream(zipFileName).pipe(
