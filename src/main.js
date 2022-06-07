@@ -198,29 +198,29 @@ async function main() {
   var session = new Session(TENANT_ID, CLIENT_ID, CLIENT_SECRET);
   await session.init();
 
-  core.debug('create new product...');
+  core.info('create new product...');
   await session.newProduct(PRODUCT_NAME);
   var productIdStr = session.product['links'][0]['href']
     .split('/')
     .slice(-1)[0];
-  core.debug('created product id: ', productIdStr);
+  core.info('created product id: ', productIdStr);
 
-  core.debug('create new submission...');
+  core.info('create new submission...');
   await session.newSubmission(productIdStr, PRODUCT_NAME);
   var submissionIdStr = session.submission['links'][0]['href']
     .split('/')
     .slice(-1)[0];
-  core.debug('created submission id: ', submissionIdStr);
+  core.info('created submission id: ', submissionIdStr);
 
   var uploadUrl = session.submission['downloads']['items'][0]['url'];
-  core.debug('upload url: ', uploadUrl);
+  core.info('upload url: ', uploadUrl);
 
-  core.debug('upload to blob...');
+  core.info('upload to blob...');
   var uploaded = await session.uploadFile(uploadUrl, BIN_PATH_IN);
-  core.debug(uploaded);
-  core.debug('the file has been uploaded to blob');
+  core.info(uploaded);
+  core.info('the file has been uploaded to blob');
 
-  core.debug('commit submission...');
+  core.info('commit submission...');
   var commit_retry_count = 0;
   while (true) {
     try {
@@ -239,8 +239,9 @@ async function main() {
       }
     }
   }
-  core.debug('submission has been committed');
-  core.debug('wait for the submission to complete');
+
+  core.info('submission has been committed');
+  core.info('wait for the submission to complete');
 
   var previousStep = '';
   while (true) {
@@ -254,22 +255,22 @@ async function main() {
 
     if (previousStep) {
       if (previousStep != step) {
-        core.debug('step has been changed to:', step);
+        core.info('step has been changed to:', step);
         previousStep = step;
       }
     } else {
-      core.debug('current step:', step);
+      core.info('current step:', step);
       previousStep = step;
     }
     if (state == 'completed') {
-      core.debug('the submission has been completed successfully');
+      core.info('the submission has been completed successfully');
       var foundSignedPackage = false;
       while (!foundSignedPackage) {
         var items = session.status['downloads']['items'];
         for (var index = 0; index < items.length; index++) {
           var v = items[index];
           if (v['type'] == 'signedPackage') {
-            core.debug('signed package download url:', v['url']);
+            core.info('signed package download url:', v['url']);
             var zipFileName = 'signed.zip';
             await downloadFileFromUrl(v['url'], zipFileName);
             //fs.createReadStream(zipFileName).pipe(
@@ -294,7 +295,7 @@ async function main() {
     await sleep(5000);
   }
 
-  core.debug('done');
+  core.info('done');
 }
 
 main();
