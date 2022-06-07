@@ -1,14 +1,17 @@
+const core = require('@actions/core');
+const github = require('@actions/github');
+
 const axios = require('axios');
 const fs = require('fs');
 
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
-const TENANT_ID = process.argv[2];
-const CLIENT_ID = process.argv[3];
-const CLIENT_SECRET = process.argv[4];
-const PRODUCT_NAME = process.argv[5];
-const BIN_PATH_IN = process.argv[6];
-const BIN_PATH_OUT = process.argv[7];
+const TENANT_ID = core.getInput('tenant-id');
+const CLIENT_ID = core.getInput('client-id');
+const CLIENT_SECRET = core.getInput('client-secret');
+const PRODUCT_NAME = core.getInput('product-name');
+const BIN_PATH_IN = core.getInput('bin-path-in');
+const BIN_PATH_OUT = core.getInput('bin-path-out');
 const USE_OUTPUT = !!BIN_PATH_OUT;
 
 const ERRORS = {
