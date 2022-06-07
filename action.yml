@@ -1,6 +1,9 @@
 name: 'driver-submission'
 author: 'Sentry Corporation'
 description: 'A GitHub Action to automate driver submission'
+branding:
+  icon: 'briefcase'  
+  color: 'blue'
 inputs:
   tenant-id:
     description: 'Specifies tenant id of the submitter AAD'
