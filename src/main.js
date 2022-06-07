@@ -3,6 +3,7 @@ const github = require('@actions/github');
 
 const axios = require('axios');
 const fs = require('fs');
+const path = require('path');
 
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
@@ -196,6 +197,10 @@ async function main() {
   var uploaded = await session.uploadFile(uploadUrl, BIN_PATH_IN);
   core.info(`the file has been uploaded to blob (${uploaded})`);
 
+  //
+  // Commit the submission, however, the commission
+  // may fail with low possibility, so retry N times.
+  //
   core.info(`commit submission...`);
   var commit_retry_count = 0;
   while (true) {
@@ -221,7 +226,10 @@ async function main() {
 
   var previousStep = '';
   while (true) {
-    //Refresh session every time, othwerwise, the status will show same forever.
+    //
+    // Refresh session every time.
+    // Othwerwise, the status will show same as previous. (weird)
+    //
     session = new Session(TENANT_ID, CLIENT_ID, CLIENT_SECRET);
     await session.init();
 
@@ -240,30 +248,33 @@ async function main() {
     }
     if (state == 'completed') {
       core.info(`the submission has been completed successfully`);
-      var foundSignedPackage = false;
-      while (!foundSignedPackage) {
-        var items = session.status['downloads']['items'];
-        for (var index = 0; index < items.length; index++) {
-          var v = items[index];
-          if (v['type'] == 'signedPackage') {
-            core.info(`signed package download url: ${v['url']}`);
-            var zipFileName = 'signed.zip';
-            await downloadFileFromUrl(v['url'], zipFileName);
-            //fs.createReadStream(zipFileName).pipe(
-            //  unzip.Extract({ path: "./signed" })
-            //);
-            try {
-            } catch (error) {}
-            foundSignedPackage = true;
-            break;
+
+      //
+      // Only download the signed package
+      // if output file path is specified.
+      //
+      if (USE_OUTPUT) {
+        var foundSignedPackage = false;
+        while (!foundSignedPackage) {
+          var items = session.status['downloads']['items'];
+          for (var index = 0; index < items.length; index++) {
+            var v = items[index];
+            if (v['type'] == 'signedPackage') {
+              core.info(`signed package download url: ${v['url']}`);
+              var zipFileName = path.join(BIN_PATH_OUT, `signed.zip`);
+              await downloadFileFromUrl(v['url'], zipFileName);
+              foundSignedPackage = true;
+              break;
+            }
           }
+          if (foundSignedPackage) break;
+          session = new Session(TENANT_ID, CLIENT_ID, CLIENT_SECRET);
+          await session.init();
+          await session.querySubmission(productIdStr, submissionIdStr);
+          await sleep(5000);
         }
-        if (foundSignedPackage) break;
-        session = new Session(TENANT_ID, CLIENT_ID, CLIENT_SECRET);
-        await session.init();
-        await session.querySubmission(productIdStr, submissionIdStr);
-        await sleep(5000);
       }
+
       break;
     } else if (state == 'failed') {
       throw `${ERRORS.SUBMISSION_FAILED}`;
