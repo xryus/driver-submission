@@ -49,12 +49,10 @@ const Session = class {
         this.token = res.data.access_token;
         this.auth = `${this.tokenType} ${this.token}`;
 
-        //core.debug('authentication succeeded')
-        //console.log("authentication succeeded");
+        core.debug('authentication succeeded');
       })
       .catch((err) => {
-        console.log(err);
-        //core.setFailed(`${ERRORS.INVALID_CREDENTIALS}}: ${err}`);
+        core.setFailed(`${ERRORS.INVALID_CREDENTIALS}}: ${err}`);
       });
   }
 
@@ -110,8 +108,7 @@ const Session = class {
         this.product = res.data;
       })
       .catch((err) => {
-        console.log(err);
-        //core.setFailed(`${ERRORS.INVALID_CREDENTIALS}}: ${err}`);
+        core.setFailed(`${ERRORS.SUBMISSION_PRODUCT_CREATE_FAILED}}: ${err}`);
       });
   }
 
@@ -134,8 +131,7 @@ const Session = class {
         this.submission = res.data;
       })
       .catch((err) => {
-        console.log(err);
-        //core.setFailed(`${ERRORS.INVALID_CREDENTIALS}}: ${err}`);
+        core.setFailed(`${ERRORS.SUBMISSION_CREATE_FAILED}}: ${err}`);
       });
 
     return true;
@@ -152,7 +148,7 @@ const Session = class {
     });
 
     if (res.status != 201) {
-      throw 'error';
+      throw `${ERRORS.SUBMISSION_UPLOAD_FAILED}`;
     }
     return true;
   }
@@ -168,7 +164,9 @@ const Session = class {
       },
     });
 
-    if (res.status != 202) throw 'error';
+    if (res.status != 202) {
+      throw `${ERRORS.SUBMISSION_COMMIT_FAILED}`;
+    }
 
     return true;
   }
@@ -181,7 +179,7 @@ const Session = class {
         this.status = res.data;
       })
       .catch((err) => {
-        console.log('err:', err);
+        core.setFailed(`${ERRORS.SUBMISSION_QUERY_FAILED}}: ${err}`);
       });
 
     return true;
@@ -197,29 +195,29 @@ async function main() {
   var session = new Session(TENANT_ID, CLIENT_ID, CLIENT_SECRET);
   await session.init();
 
-  console.log('create new product...');
+  core.debug('create new product...');
   await session.newProduct(PRODUCT_NAME);
   var productIdStr = session.product['links'][0]['href']
     .split('/')
     .slice(-1)[0];
-  console.log('created product id: ', productIdStr);
+  core.debug('created product id: ', productIdStr);
 
-  console.log('create new submission...');
+  core.debug('create new submission...');
   await session.newSubmission(productIdStr, PRODUCT_NAME);
   var submissionIdStr = session.submission['links'][0]['href']
     .split('/')
     .slice(-1)[0];
-  console.log('created submission id: ', submissionIdStr);
+  core.debug('created submission id: ', submissionIdStr);
 
   var uploadUrl = session.submission['downloads']['items'][0]['url'];
-  console.log('upload url: ', uploadUrl);
+  core.debug('upload url: ', uploadUrl);
 
-  console.log('upload to blob...');
+  core.debug('upload to blob...');
   var uploaded = await session.uploadFile(uploadUrl, BIN_PATH_IN);
-  console.log(uploaded);
-  console.log('the file has been uploaded to blob');
+  core.debug(uploaded);
+  core.debug('the file has been uploaded to blob');
 
-  console.log('commit submission...');
+  core.debug('commit submission...');
   var commit_retry_count = 0;
   while (true) {
     try {
@@ -229,17 +227,17 @@ async function main() {
       );
       if (commited) break;
     } catch (err) {
-      console.log(err);
+      core.debug(`${ERRORS.SUBMISSION_COMMIT_FAILED}: ${err}`);
       if (commit_retry_count < 10) {
         commit_retry_count += 1;
         continue;
       } else {
-        //SubmissionCommitFailedException
+        throw `${ERRORS.SUBMISSION_COMMIT_FAILED}`;
       }
     }
   }
-  console.log('submission has been committed');
-  console.log('wait for the submission to complete');
+  core.debug('submission has been committed');
+  core.debug('wait for the submission to complete');
 
   var previousStep = '';
   while (true) {
@@ -253,22 +251,22 @@ async function main() {
 
     if (previousStep) {
       if (previousStep != step) {
-        console.log('step has been changed to:', step);
+        core.debug('step has been changed to:', step);
         previousStep = step;
       }
     } else {
-      console.log('current step:', step);
+      core.debug('current step:', step);
       previousStep = step;
     }
     if (state == 'completed') {
-      console.log('the submission has been completed successfully');
+      core.debug('the submission has been completed successfully');
       var foundSignedPackage = false;
       while (!foundSignedPackage) {
         var items = session.status['downloads']['items'];
         for (var index = 0; index < items.length; index++) {
           var v = items[index];
           if (v['type'] == 'signedPackage') {
-            console.log('signed package download url:', v['url']);
+            core.debug('signed package download url:', v['url']);
             var zipFileName = 'signed.zip';
             await downloadFileFromUrl(v['url'], zipFileName);
             //fs.createReadStream(zipFileName).pipe(
@@ -288,11 +286,12 @@ async function main() {
       }
       break;
     } else if (state == 'failed') {
-      throw 'error';
+      throw `${ERRORS.SUBMISSION_FAILED}`;
     }
     await sleep(5000);
   }
-  console.log('done');
+
+  core.debug('done');
 }
 
 main();
