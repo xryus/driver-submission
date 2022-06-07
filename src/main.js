@@ -15,7 +15,7 @@ const BIN_PATH_IN = core.getInput('bin-path-in');
 const BIN_PATH_OUT = core.getInput('bin-path-out');
 const USE_OUTPUT = !!BIN_PATH_OUT;
 
-core.info(`${typeof SIGNATURES}`);
+core.info(`${JSON.parse(SIGNATURES)}`);
 
 const ERRORS = {
   INVALID_CREDENTIALS: 'An invalid credentials specified',
@@ -73,7 +73,7 @@ const Session = class {
       isFlightSign: false,
       marketingNames: [],
       selectedProductTypes: {},
-      requestedSignatures: SIGNATURES,
+      requestedSignatures: JSON.parse(SIGNATURES),
       additionalAttributes: {},
     };
 
