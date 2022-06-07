@@ -10,6 +10,7 @@ const TENANT_ID = core.getInput('tenant-id');
 const CLIENT_ID = core.getInput('client-id');
 const CLIENT_SECRET = core.getInput('client-secret');
 const PRODUCT_NAME = core.getInput('product-name');
+const SIGNATURES = core.getInput('signatures');
 const BIN_PATH_IN = core.getInput('bin-path-in');
 const BIN_PATH_OUT = core.getInput('bin-path-out');
 const USE_OUTPUT = !!BIN_PATH_OUT;
@@ -70,31 +71,7 @@ const Session = class {
       isFlightSign: false,
       marketingNames: [],
       selectedProductTypes: {},
-      requestedSignatures: [
-        'WINDOWS_v100_TH2_FULL',
-        'WINDOWS_v100_X64_TH2_FULL',
-        'WINDOWS_v100_RS1_FULL',
-        'WINDOWS_v100_X64_RS1_FULL',
-        'WINDOWS_v100_RS2_FULL',
-        'WINDOWS_v100_X64_RS2_FULL',
-        'WINDOWS_v100_RS3_FULL',
-        'WINDOWS_v100_X64_RS3_FULL',
-        'WINDOWS_v100_ARM64_RS3_FULL',
-        'WINDOWS_v100_RS4_FULL',
-        'WINDOWS_v100_X64_RS4_FULL',
-        'WINDOWS_v100_ARM64_RS4_FULL',
-        'WINDOWS_v100_RS5_FULL',
-        'WINDOWS_v100_X64_RS5_FULL',
-        'WINDOWS_v100_ARM64_RS5_FULL',
-        'WINDOWS_v100_19H1_FULL',
-        'WINDOWS_v100_X64_19H1_FULL',
-        'WINDOWS_v100_ARM64_19H1_FULL',
-        'WINDOWS_v100_VB_FULL',
-        'WINDOWS_v100_X64_VB_FULL',
-        'WINDOWS_v100_ARM64_VB_FULL',
-        'WINDOWS_v100_X64_CO_FULL',
-        'WINDOWS_v100_ARM64_CO_FULL',
-      ],
+      requestedSignatures: SIGNATURES,
       additionalAttributes: {},
     };
 

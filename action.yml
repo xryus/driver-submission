@@ -2,7 +2,7 @@ name: 'driver-submission'
 author: 'Sentry Corporation'
 description: 'A GitHub Action to automate driver submission'
 branding:
-  icon: 'briefcase'  
+  icon: 'briefcase'
   color: 'blue'
 inputs:
   tenant-id:
@@ -16,6 +16,9 @@ inputs:
     required: true
   product-name:
     description: 'Specifies product name of the driver'
+    required: true
+  signatures:
+    description: 'Specifies requestal signatures'
     required: true
   bin-path-in:
     description: 'Specifies input file path to submit'
