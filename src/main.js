@@ -182,7 +182,7 @@ const Session = class {
     axiosRetry(client, { retries: 10, retryDelay: 5000 });
 
     client
-      .get(url, { headers: { Authorization: this.auth } })
+      .get(`/`)
       .then((res) => {
         this.status = res.data;
       })
