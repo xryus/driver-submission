@@ -159,7 +159,7 @@ const Session = class {
 
     axiosRetry(client, { retries: 10, retryDelay: 5000 });
 
-    client
+    await client
       .post(`/`)
       .then((res) => {})
       .catch((err) => {
@@ -174,14 +174,12 @@ const Session = class {
       baseURL: `https://manage.devcenter.microsoft.com/v2.0/my/hardware/products/${productId}/submissions/${submissionId}`,
       headers: {
         Authorization: this.auth,
-        'Content-Type': 'application/json',
-        'Content-Length': '0',
       },
     });
 
     axiosRetry(client, { retries: 10, retryDelay: 5000 });
 
-    client
+    await client
       .get(`/`)
       .then((res) => {
         this.status = res.data;
