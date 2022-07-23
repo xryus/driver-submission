@@ -1,7 +1,11 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 
+const { axiosRetry } = require('axios-retry');
 const axios = require('axios');
+
+axiosRetry(axios, { retries: 10, retryDelay: 5000 });
+
 const fs = require('fs');
 const path = require('path');
 
