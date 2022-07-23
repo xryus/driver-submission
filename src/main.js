@@ -153,7 +153,6 @@ const Session = class {
       headers: {
         Authorization: this.auth,
       },
-      responseType: 'json',
     });
 
     axiosRetry(client, { retries: 10, retryDelay: 5000 });
