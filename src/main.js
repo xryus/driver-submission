@@ -170,9 +170,18 @@ const Session = class {
   }
 
   async querySubmission(productId, submissionId) {
-    var url = `https://manage.devcenter.microsoft.com/v2.0/my/hardware/products/${productId}/submissions/${submissionId}`;
+    let client = axios.create({
+      baseURL: `https://manage.devcenter.microsoft.com/v2.0/my/hardware/products/${productId}/submissions/${submissionId}`,
+      headers: {
+        Authorization: this.auth,
+        'Content-Type': 'application/json',
+        'Content-Length': '0',
+      },
+    });
 
-    await axios
+    axiosRetry(client, { retries: 10, retryDelay: 5000 });
+
+    client
       .get(url, { headers: { Authorization: this.auth } })
       .then((res) => {
         this.status = res.data;
