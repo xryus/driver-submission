@@ -44,14 +44,17 @@ const Session = class {
     payload.append('client_secret', this.clientSecret);
     payload.append('resource', 'https://manage.devcenter.microsoft.com');
 
-    await axios
-      .create({
-        baseURL: `https://login.microsoftonline.com/${this.tenantId}/oauth2/token`,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        responseType: 'json',
-      })
+    let client = await axios.create({
+      baseURL: `https://login.microsoftonline.com/${this.tenantId}/oauth2/token`,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      responseType: 'json',
+    });
+
+    axiosRetry(client, { retries: 10, retryDelay: 5000 });
+
+    client
       .post('/', payload)
       .then((res) => {
         this.tokenType = res.data.token_type;
@@ -79,14 +82,17 @@ const Session = class {
       additionalAttributes: {},
     };
 
-    await axios
-      .create({
-        baseURL: `https://manage.devcenter.microsoft.com/v2.0/my/hardware/products/`,
-        headers: {
-          Authorization: this.auth,
-        },
-        responseType: 'json',
-      })
+    let client = await axios.create({
+      baseURL: `https://manage.devcenter.microsoft.com/v2.0/my/hardware/products/`,
+      headers: {
+        Authorization: this.auth,
+      },
+      responseType: 'json',
+    });
+
+    axiosRetry(client, { retries: 10, retryDelay: 5000 });
+
+    client
       .post('/', payload)
       .then((res) => {
         this.product = res.data;
@@ -102,14 +108,17 @@ const Session = class {
       type: productType,
     };
 
-    await axios
-      .create({
-        baseURL: `https://manage.devcenter.microsoft.com/v2.0/my/hardware/products/${productId}/submissions`,
-        headers: {
-          Authorization: this.auth,
-        },
-        responseType: 'json',
-      })
+    let client = await axios.create({
+      baseURL: `https://manage.devcenter.microsoft.com/v2.0/my/hardware/products/${productId}/submissions`,
+      headers: {
+        Authorization: this.auth,
+      },
+      responseType: 'json',
+    });
+
+    axiosRetry(client, { retries: 10, retryDelay: 5000 });
+
+    client
       .post('/', payload)
       .then((res) => {
         this.submission = res.data;
@@ -134,6 +143,7 @@ const Session = class {
     if (res.status != 201) {
       throw `${ERRORS.SUBMISSION_UPLOAD_FAILED}`;
     }
+
     return true;
   }
 
