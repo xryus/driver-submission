@@ -148,19 +148,22 @@ const Session = class {
   }
 
   async commitSubmission(productId, submissionId) {
-    var url = `https://manage.devcenter.microsoft.com/v2.0/my/hardware/products/${productId}/submissions/${submissionId}/commit`;
-    var res = await axios({
-      method: 'POST',
-      url: url,
+    let client = axios.create({
+      baseURL: `https://manage.devcenter.microsoft.com/v2.0/my/hardware/products/${productId}/submissions/${submissionId}/commit`,
       headers: {
         Authorization: this.auth,
-        'Content-Type': 'application/json',
       },
+      responseType: 'json',
     });
 
-    if (res.status != 202) {
-      throw `${ERRORS.SUBMISSION_COMMIT_FAILED}`;
-    }
+    axiosRetry(client, { retries: 10, retryDelay: 5000 });
+
+    client
+      .post(`/`)
+      .then((res) => {})
+      .catch((err) => {
+        core.setFailed(`${ERRORS.SUBMISSION_COMMIT_FAILED}: ${err}`);
+      });
 
     return true;
   }
