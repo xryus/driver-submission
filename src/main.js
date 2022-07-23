@@ -44,7 +44,7 @@ const Session = class {
     payload.append('client_secret', this.clientSecret);
     payload.append('resource', 'https://manage.devcenter.microsoft.com');
 
-    let client = await axios.create({
+    let client = axios.create({
       baseURL: `https://login.microsoftonline.com/${this.tenantId}/oauth2/token`,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -54,7 +54,7 @@ const Session = class {
 
     axiosRetry(client, { retries: 10, retryDelay: 5000 });
 
-    client
+    await client
       .post('/', payload)
       .then((res) => {
         this.tokenType = res.data.token_type;
@@ -82,7 +82,7 @@ const Session = class {
       additionalAttributes: {},
     };
 
-    let client = await axios.create({
+    let client = axios.create({
       baseURL: `https://manage.devcenter.microsoft.com/v2.0/my/hardware/products/`,
       headers: {
         Authorization: this.auth,
@@ -92,7 +92,7 @@ const Session = class {
 
     axiosRetry(client, { retries: 10, retryDelay: 5000 });
 
-    client
+    await client
       .post('/', payload)
       .then((res) => {
         this.product = res.data;
@@ -108,7 +108,7 @@ const Session = class {
       type: productType,
     };
 
-    let client = await axios.create({
+    let client = axios.create({
       baseURL: `https://manage.devcenter.microsoft.com/v2.0/my/hardware/products/${productId}/submissions`,
       headers: {
         Authorization: this.auth,
@@ -118,7 +118,7 @@ const Session = class {
 
     axiosRetry(client, { retries: 10, retryDelay: 5000 });
 
-    client
+    await client
       .post('/', payload)
       .then((res) => {
         this.submission = res.data;
@@ -167,6 +167,7 @@ const Session = class {
 
   async querySubmission(productId, submissionId) {
     var url = `https://manage.devcenter.microsoft.com/v2.0/my/hardware/products/${productId}/submissions/${submissionId}`;
+
     await axios
       .get(url, { headers: { Authorization: this.auth } })
       .then((res) => {
