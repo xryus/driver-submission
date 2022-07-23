@@ -152,6 +152,8 @@ const Session = class {
       baseURL: `https://manage.devcenter.microsoft.com/v2.0/my/hardware/products/${productId}/submissions/${submissionId}/commit`,
       headers: {
         Authorization: this.auth,
+        'Content-Type': 'application/json',
+        'Content-Length': '0',
       },
     });
 
