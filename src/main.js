@@ -289,6 +289,9 @@ async function main() {
               core.info(`signed package download url: ${v['url']}`);
               var zipFileName = path.join(BIN_PATH_OUT, `signed.zip`);
               await downloadFileFromUrl(v['url'], zipFileName);
+              await fs
+                .createReadStream(zipFileName)
+                .pipe(unzip.Extract({ path: BIN_PATH_OUT }));
               foundSignedPackage = true;
               break;
             }
