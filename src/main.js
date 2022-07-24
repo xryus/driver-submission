@@ -8,7 +8,7 @@ axiosRetry(axios, { retries: 10, retryDelay: 5000 });
 
 const fs = require('fs');
 const path = require('path');
-const unzip = require('unzip');
+const unzipper = require('unzipper');
 
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
@@ -291,7 +291,7 @@ async function main() {
               await downloadFileFromUrl(v['url'], zipFileName);
               await fs
                 .createReadStream(zipFileName)
-                .pipe(unzip.Extract({ path: BIN_PATH_OUT }));
+                .pipe(unzipper.Extract({ path: BIN_PATH_OUT }));
               foundSignedPackage = true;
               break;
             }
