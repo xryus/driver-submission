@@ -8,6 +8,7 @@ axiosRetry(axios, { retries: 10, retryDelay: 5000 });
 
 const fs = require('fs');
 const path = require('path');
+const unzip = require('unzip');
 
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
