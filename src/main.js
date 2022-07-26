@@ -55,18 +55,13 @@ const Session = class {
 
     axiosRetry(client, { retries: 10, retryDelay: 5000 });
 
-    await client
-      .post('/', payload)
-      .then((res) => {
-        this.tokenType = res.data.token_type;
-        this.token = res.data.access_token;
-        this.auth = `${this.tokenType} ${this.token}`;
+    await client.post('/', payload).then((res) => {
+      this.tokenType = res.data.token_type;
+      this.token = res.data.access_token;
+      this.auth = `${this.tokenType} ${this.token}`;
 
-        core.debug('authentication succeeded');
-      })
-      .catch((err) => {
-        core.setFailed(`${ERRORS.INVALID_CREDENTIALS}: ${err}`);
-      });
+      core.debug('authentication succeeded');
+    });
   }
 
   async newProduct(productName) {
@@ -93,14 +88,9 @@ const Session = class {
 
     axiosRetry(client, { retries: 10, retryDelay: 5000 });
 
-    await client
-      .post('/', payload)
-      .then((res) => {
-        this.product = res.data;
-      })
-      .catch((err) => {
-        core.setFailed(`${ERRORS.SUBMISSION_PRODUCT_CREATE_FAILED}: ${err}`);
-      });
+    await client.post('/', payload).then((res) => {
+      this.product = res.data;
+    });
   }
 
   async newSubmission(productId, productName, productType = 'initial') {
@@ -119,14 +109,9 @@ const Session = class {
 
     axiosRetry(client, { retries: 10, retryDelay: 5000 });
 
-    await client
-      .post('/', payload)
-      .then((res) => {
-        this.submission = res.data;
-      })
-      .catch((err) => {
-        core.setFailed(`${ERRORS.SUBMISSION_CREATE_FAILED}: ${err}`);
-      });
+    await client.post('/', payload).then((res) => {
+      this.submission = res.data;
+    });
 
     return true;
   }
@@ -175,14 +160,9 @@ const Session = class {
 
     axiosRetry(client, { retries: 10, retryDelay: 5000 });
 
-    await client
-      .get(`/`)
-      .then((res) => {
-        this.status = res.data;
-      })
-      .catch((err) => {
-        core.setFailed(`${ERRORS.SUBMISSION_QUERY_FAILED}: ${err}`);
-      });
+    await client.get(`/`).then((res) => {
+      this.status = res.data;
+    });
 
     return true;
   }
