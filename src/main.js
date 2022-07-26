@@ -86,7 +86,16 @@ const Session = class {
       responseType: 'json',
     });
 
-    axiosRetry(client, { retries: 10, retryDelay: 5000 });
+    axiosRetry(client, {
+      retries: 10,
+      retryDelay: 5000,
+      onRetry: function (retryCount, error, requestConfig) {
+        core.warning(
+          `${arguments.callee.name}: retrying ... (attempt #${retryCount})`
+        );
+        core.debug(`(attempt #${retryCount}): ${error}`);
+      },
+    });
 
     await client.post('/', payload).then((res) => {
       this.product = res.data;
@@ -107,7 +116,16 @@ const Session = class {
       responseType: 'json',
     });
 
-    axiosRetry(client, { retries: 10, retryDelay: 5000 });
+    axiosRetry(client, {
+      retries: 10,
+      retryDelay: 5000,
+      onRetry: function (retryCount, error, requestConfig) {
+        core.warning(
+          `${arguments.callee.name}: retrying ... (attempt #${retryCount})`
+        );
+        core.debug(`(attempt #${retryCount}): ${error}`);
+      },
+    });
 
     await client.post('/', payload).then((res) => {
       this.submission = res.data;
@@ -143,7 +161,16 @@ const Session = class {
       },
     });
 
-    axiosRetry(client, { retries: 10, retryDelay: 5000 });
+    axiosRetry(client, {
+      retries: 10,
+      retryDelay: 5000,
+      onRetry: function (retryCount, error, requestConfig) {
+        core.warning(
+          `${arguments.callee.name}: retrying ... (attempt #${retryCount})`
+        );
+        core.debug(`(attempt #${retryCount}): ${error}`);
+      },
+    });
 
     await client.post(`/`);
 
@@ -158,7 +185,16 @@ const Session = class {
       },
     });
 
-    axiosRetry(client, { retries: 10, retryDelay: 5000 });
+    axiosRetry(client, {
+      retries: 10,
+      retryDelay: 5000,
+      onRetry: function (retryCount, error, requestConfig) {
+        core.warning(
+          `${arguments.callee.name}: retrying ... (attempt #${retryCount})`
+        );
+        core.debug(`(attempt #${retryCount}): ${error}`);
+      },
+    });
 
     await client.get(`/`).then((res) => {
       this.status = res.data;
