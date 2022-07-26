@@ -160,12 +160,7 @@ const Session = class {
 
     axiosRetry(client, { retries: 10, retryDelay: 5000 });
 
-    await client
-      .post(`/`)
-      .then((res) => {})
-      .catch((err) => {
-        core.setFailed(`${ERRORS.SUBMISSION_COMMIT_FAILED}: ${err}`);
-      });
+    await client.post(`/`);
 
     return true;
   }
