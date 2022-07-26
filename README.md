@@ -16,7 +16,7 @@ jobs:
     - uses: actions/checkout@v2
     
     - name: 'Submit to the Microsoft Partner Center'
-      uses: sentry-corporation/driver-submission@v1.1.1
+      uses: sentry-corporation/driver-submission@v1.2.4
       with:
         tenant-id: ${{ secrets.MY_TENANT_ID }}
         client-id: ${{ secrets.MY_CLIENT_ID }}
