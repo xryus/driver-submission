@@ -4,7 +4,7 @@ const github = require('@actions/github');
 const axiosRetry = require('axios-retry');
 const axios = require('axios');
 
-axiosRetry(axios, { retries: 10, retryDelay: 5000 });
+axiosRetry(axios, { retries: 10, retryDelay: () => 5000 });
 
 const fs = require('fs');
 const path = require('path');
@@ -53,7 +53,7 @@ const Session = class {
       responseType: 'json',
     });
 
-    axiosRetry(client, { retries: 10, retryDelay: 5000 });
+    axiosRetry(client, { retries: 10, retryDelay: () => 5000 });
 
     await client.post('/', payload).then((res) => {
       this.tokenType = res.data.token_type;
@@ -88,7 +88,7 @@ const Session = class {
 
     axiosRetry(client, {
       retries: 10,
-      retryDelay: 5000,
+      retryDelay: () => 5000,
       onRetry: function (retryCount, error, requestConfig) {
         core.warning(
           `${arguments.callee.name}: retrying ... (attempt #${retryCount})`
@@ -118,7 +118,7 @@ const Session = class {
 
     axiosRetry(client, {
       retries: 10,
-      retryDelay: 5000,
+      retryDelay: () => 5000,
       onRetry: function (retryCount, error, requestConfig) {
         core.warning(
           `${arguments.callee.name}: retrying ... (attempt #${retryCount})`
@@ -163,7 +163,7 @@ const Session = class {
 
     axiosRetry(client, {
       retries: 10,
-      retryDelay: 5000,
+      retryDelay: () => 5000,
       onRetry: function (retryCount, error, requestConfig) {
         core.warning(
           `${arguments.callee.name}: retrying ... (attempt #${retryCount})`
@@ -187,7 +187,7 @@ const Session = class {
 
     axiosRetry(client, {
       retries: 10,
-      retryDelay: 5000,
+      retryDelay: () => 5000,
       onRetry: function (retryCount, error, requestConfig) {
         core.warning(
           `${arguments.callee.name}: retrying ... (attempt #${retryCount})`
