@@ -144,6 +144,8 @@ const Session = class {
       method: 'PUT',
       url: url,
       headers: { 'x-ms-blob-type': 'BlockBlob' },
+      maxContentLength: Infinity,
+      maxBodyLength: Infinity,
       data: binary,
     });
 
